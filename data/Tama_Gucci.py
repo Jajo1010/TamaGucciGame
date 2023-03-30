@@ -15,11 +15,7 @@ def main():
     pygame.display.update()
     FPS_CLOCK.tick(FPS)
     
-    while True:
-
-        start_screen.display_start_screen()
-        pygame.display.update()
-        FPS_CLOCK.tick(FPS)
+    start_screen()
 
 if __name__ == '__main__':
     main()
