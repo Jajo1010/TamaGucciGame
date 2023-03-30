@@ -17,10 +17,17 @@ def display_start_screen():
         dirname, "..\\..\\resources\\graphics\\start_active.png")).convert_alpha()
     sc_bg = pygame.image.load(os.path.join(
         dirname, "..\\..\\resources\\graphics\\start_screen_clean.png"))
+    
+    text_width, text_height = sc_text_active.get_width(), sc_text_active.get_height()
+
     draw_start_screen(sc_bg)
-    while True:
-        draw_start_text(sc_text_inactive, sc_text_active)
+    game_started = False
+    while not game_started:
+        draw_start_text(sc_text_inactive, sc_text_active,text_width,text_height)
         handle_quit()
+        if handle_click(*top_left_corner_text(SCREEN_WIDTH, SCREEN_HEIGHT, text_width, text_height), text_width, text_height):
+            game_started = True
+            print("sex")
         pygame.display.update()
         FPS_CLOCK.tick(FPS)
 
@@ -28,9 +35,8 @@ def display_start_screen():
 def draw_start_screen(sc_bg):
     return START_SURFACE.blit(sc_bg, (0, 0))
 
-def draw_start_text(sc_text_inactive, sc_text_active):
+def draw_start_text(sc_text_inactive, sc_text_active,text_width,text_height):
 
-    text_width, text_height = sc_text_active.get_width(), sc_text_active.get_height()
 
     inactive_center_x, inactive_center_y = to_center_of_screen(
         SCREEN_WIDTH, SCREEN_HEIGHT, *image_center_x_y(sc_text_inactive))
@@ -47,6 +53,12 @@ def handle_hover(cord_x, cord_y, width, height):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if (mouse_x >= cord_x and mouse_x <= cord_x+width) and (mouse_y >= cord_y and mouse_y <= height+cord_y):
         return True
+
+def handle_click(cord_x, cord_y, width, height):
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    if pygame.event.get(MOUSEBUTTONUP):
+        if (mouse_x >= cord_x and mouse_x <= cord_x+width) and (mouse_y >= cord_y and mouse_y <= height+cord_y):
+            return True
 
 
 def top_left_corner_text(bg_w, bg_h, x_obj, y_obj):
