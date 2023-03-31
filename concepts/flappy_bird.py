@@ -29,8 +29,9 @@ def main():
     BASICFONT = pygame.font.Font('freesansbold.ttf', 20)
     
     bg = pygame.image.load(os.path.join(dirname,"..\\resources\\graphics\\flappy_bird\\city-bg.png"))
+    bg = pygame.transform.scale(bg, (1600, 768))
     cloud_image = pygame.image.load(os.path.join(dirname,"..\\resources\\graphics\\flappy_bird\\cloud.png"))
-
+    cloud_image = pygame.transform.scale(cloud_image, (184, 100)).convert_alpha(DISPLAY_SURFACE)
     title_screen(bg)
     
     while True:
@@ -182,10 +183,6 @@ def move_towers(top_towers, bottom_towers):
             bottom_towers[i] = pygame.Rect(x, top_towers[i].height + TOWER_GAP, TOWER_WIDTH, HEIGHT - top_towers[i].height - TOWER_GAP)
 
 def draw_bg(cloud_rect, bg_rect,bg,cloud_image):
-
-    cloud_image = pygame.transform.scale(cloud_image, (184, 100)).convert_alpha(DISPLAY_SURFACE)
-    bg = pygame.transform.scale(bg, (1600, 768))
-
     DISPLAY_SURFACE.fill(SKY_COLOR)
     DISPLAY_SURFACE.blit(bg, bg_rect)
     DISPLAY_SURFACE.blit(cloud_image, cloud_rect)
