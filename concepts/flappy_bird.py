@@ -32,10 +32,10 @@ def main():
     bg = pygame.transform.scale(bg, (1600, 768))
     cloud_image = pygame.image.load(os.path.join(dirname,"..\\resources\\graphics\\flappy_bird\\cloud.png"))
     cloud_image = pygame.transform.scale(cloud_image, (184, 100)).convert_alpha(DISPLAY_SURFACE)
-    title_screen(bg)
-    
+
+    title_screen(bg) 
     while True:
-        run_game(bg,cloud_image)
+        run_game(bg, cloud_image)
         is_over()
 
 
@@ -50,7 +50,10 @@ def run_game(bg,cloud_image):
     score = 0
     first_towers(top_towers, bottom_towers)
     ended = False
-
+    while not was_key_pressed_or_was_clicked():
+        draw_game_state(cloud_rect, bg_rect, top_towers, bottom_towers, HERO,bg,cloud_image, score)
+        FPS_CLOCK.tick(FPS)
+        pygame.display.flip()
     while not ended:
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
@@ -74,7 +77,7 @@ def run_game(bg,cloud_image):
             last_tower_passed = (last_tower_passed + 1) % len(top_towers)
             score += 1
 
-        draw_game_state(cloud_rect, bg_rect, top_towers, bottom_towers, HERO,bg,cloud_image, score)
+        draw_game_state(cloud_rect, bg_rect, top_towers, bottom_towers, HERO,bg,cloud_image, score, 3)
         FPS_CLOCK.tick(FPS)
         pygame.display.flip()
 
@@ -101,17 +104,17 @@ def draw_score(score):
     DISPLAY_SURFACE.blit(score_surface, score_rect)
 
 
-def was_key_pressed():
-    for event in pygame.event.get(KEYUP):
-        if event.key == K_ESCAPE:
+def was_key_pressed_or_was_clicked():
+    for event in pygame.event.get():
+        if event.type == QUIT:
             terminate()
-        else:
+        elif event.type == MOUSEBUTTONUP:
             return True
-
-    """Exit game on QUIT event, or return True if key was pressed."""
-    if pygame.event.get(QUIT): # noqa
-        terminate()
-    return False # noqa
+        elif event.type == KEYUP and event.key == K_ESCAPE:
+            terminate()
+        elif event.type == KEYUP:
+            return True
+    return False
 
 
 def wait_for_key_pressed():
@@ -119,7 +122,7 @@ def wait_for_key_pressed():
     msg_surface = BASICFONT.render('Press Space to play.', True, DARK_TURQUOISE)
     msg_rect = msg_surface.get_rect()
     msg_rect.topleft = (WIDTH - 275, WIDTH - 225)
-    while not was_key_pressed():
+    while not was_key_pressed_or_was_clicked():
         DISPLAY_SURFACE.blit(msg_surface, msg_rect)
         pygame.display.update()
 
@@ -140,7 +143,7 @@ def title_screen(bg):
     direction = 1
     iterations_to_move = 2
     counter = 0
-    while not was_key_pressed():
+    while not was_key_pressed_or_was_clicked():
         if msg_rect.y >= (WIDTH/2):
             direction = -1
         elif msg_rect.y <= (WIDTH/2)-20:
@@ -182,20 +185,20 @@ def move_towers(top_towers, bottom_towers):
             top_towers[i] = pygame.Rect(x, 0, TOWER_WIDTH, random.randint(100, 400))
             bottom_towers[i] = pygame.Rect(x, top_towers[i].height + TOWER_GAP, TOWER_WIDTH, HEIGHT - top_towers[i].height - TOWER_GAP)
 
-def draw_bg(cloud_rect, bg_rect,bg,cloud_image):
+def draw_bg(cloud_rect, bg_rect,bg,cloud_image, bg_speed=0):
     DISPLAY_SURFACE.fill(SKY_COLOR)
     DISPLAY_SURFACE.blit(bg, bg_rect)
     DISPLAY_SURFACE.blit(cloud_image, cloud_rect)
     
     cloud_rect.x -= 1
-    bg_rect.x -= 3
+    bg_rect.x -= bg_speed
     if cloud_rect.x <= -184:
         cloud_rect.x = WIDTH
     if bg_rect.x <= -800:
         bg_rect.x = 0
 
-def draw_game_state(cloud_rect, bg_rect, top_towers, bottom_towers, HERO,bg,cloud_image, score):
-    draw_bg(cloud_rect, bg_rect,bg,cloud_image)
+def draw_game_state(cloud_rect, bg_rect, top_towers, bottom_towers, HERO,bg,cloud_image, score, bg_speed=0):
+    draw_bg(cloud_rect, bg_rect,bg,cloud_image, bg_speed)
     draw_towers(top_towers, bottom_towers)
     pygame.draw.rect(DISPLAY_SURFACE, (0, 255, 0), HERO)
     draw_score(score)
