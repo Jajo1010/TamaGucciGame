@@ -1,44 +1,41 @@
-from constants import *
 import pygame
 from pygame.locals import *
+from constants import *
 from helpers import terminate, image_center_x_y, to_center_of_screen, file_list_from_dir, surfaces_from_file_list
+from spritesheet import Spritesheet
 import os
 
 START_SURFACE = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 FPS_CLOCK = pygame.time.Clock()
 
-dirname = os.path.dirname(__file__)
-
-def picovina(strpng):
-    return int(strpng.split(".")[0])
+DIRNAME = os.path.dirname(__file__)
 
 def display_start_screen():
     sc_text_inactive = pygame.image.load(os.path.join(
-        dirname, "..\\..\\resources\\graphics\\start_inactive.png")).convert_alpha()
+        DIRNAME, "..\\..\\resources\\graphics\\start_inactive.png")).convert_alpha()
     sc_text_active = pygame.image.load(os.path.join(
-        dirname, "..\\..\\resources\\graphics\\start_active.png")).convert_alpha()
+        DIRNAME, "..\\..\\resources\\graphics\\start_active.png")).convert_alpha()
     sc_bg = pygame.image.load(os.path.join(
-        dirname, "..\\..\\resources\\graphics\\start_screen_clean.png"))
+        DIRNAME, "..\\..\\resources\\graphics\\start_screen_clean.png"))
 
     animation_path = os.path.join(
-        dirname, "..\\..\\resources\\graphics\\animation\\pointing")
+        DIRNAME, "..\\..\\resources\\graphics\\animation\\")
+    
+    character_spritesheet = Spritesheet(f"{animation_path}\\character_spritesheet.png")
+    character_spritesheet_filenames = character_spritesheet.list_of_files()
+    character_animation = [character_spritesheet.parse_sprite(file) for file in character_spritesheet_filenames]
 
-    sprite_file_names = sorted(file_list_from_dir(animation_path),key= lambda item: int(item.split('.')[0]))
-    sprites = surfaces_from_file_list(animation_path, sprite_file_names)
     text_width, text_height = sc_text_active.get_width(), sc_text_active.get_height()
 
     animation_frame = 0
 
     game_started = False
     while not game_started:
-        animation_frame = (animation_frame + 1) % len(sprites)
-
-
+        animation_frame = (animation_frame + 1) % len(character_spritesheet_filenames)
         draw_start_screen(sc_bg)
-        draw_animated_character(sprites,animation_frame)
+        draw_animated_character(character_animation,animation_frame)
         if handle_click(*top_left_corner_text(SCREEN_WIDTH, SCREEN_HEIGHT, text_width, text_height), text_width, text_height):
             game_started = True
-
         handle_quit()
         draw_start_text(sc_text_inactive, sc_text_active, text_width, text_height)
         pygame.display.update()
@@ -63,8 +60,7 @@ def draw_start_text(sc_text_inactive, sc_text_active, text_width, text_height):
 
 
 def draw_animated_character(character, frame):
-    x, y = character[frame].get_width(),character[frame].get_height()
-    return START_SURFACE.blit(character[frame], (0, SCREEN_HEIGHT-y))
+    return START_SURFACE.blit(character[frame], (0, SCREEN_HEIGHT-512))
 
 
 def handle_hover(cord_x, cord_y, width, height):

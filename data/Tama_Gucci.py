@@ -1,6 +1,6 @@
 from constants import *
 import pygame
-from components import start_screen
+from components import start_screen 
 from pygame.locals import *
 
 
