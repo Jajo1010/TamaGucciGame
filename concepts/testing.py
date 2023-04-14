@@ -16,6 +16,7 @@ class FlappyBirdGame():
         self.DARK_TURQUOISE = (3, 54, 73)
         self.TOWER_COLOR = (100, 100, 100)
 
+
         self.TOWER_WIDTH = 50
         self.TOWER_GAP = 300
 
@@ -50,9 +51,7 @@ class FlappyBirdGame():
         self.cloud_rect = pygame.Rect(self.WIDTH, 100, 92, 50)
         self.top_towers = []
         self.bottom_towers = []
-        self.last_tower_passed = 0
         self.first_towers()
-        self.score = 0
         self.ended = False
         gravity = -12
         while not self.was_key_pressed_or_was_clicked():
@@ -98,7 +97,6 @@ class FlappyBirdGame():
 
         self.DISPLAY_SURFACE.blit(game_surface, game_rect)
         self.DISPLAY_SURFACE.blit(over_surface, over_rect)
-
         pygame.display.update()
         self.wait_for_key_pressed()
 
@@ -114,7 +112,7 @@ class FlappyBirdGame():
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.terminate()
-            elif event.type == MOUSEBUTTONDOWN:
+            elif event.type == MOUSEBUTTONUP:
                 return True
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 self.terminate()
