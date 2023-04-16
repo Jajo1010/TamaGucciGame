@@ -5,7 +5,7 @@ import random
 import os
 
 
-class FlappyBirdGame():
+class FlappyBirdGame:
     def __init__(self):
         pygame.init()
         self.WIDTH = 800
