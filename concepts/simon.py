@@ -3,6 +3,7 @@ from pygame.locals import *
 import random
 import os
 from sys import exit
+import time
 
 
 class Simon:
@@ -12,9 +13,9 @@ class Simon:
         self.HEIGHT = 600
 
         self.DISPLAY_SURFACE = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
-        self.FPS = 60
+        self.FPS = 30
         self.FPS_CLOCK = pygame.time.Clock()
-        self.BASICFONT = pygame.font.Font('freesansbold.ttf', 20)
+        self.BASICFONT = pygame.font.Font('freesansbold.ttf', 60)
         self.dirname = os.path.dirname(__file__)
 
         self.GREEN_inactive = (0, 100, 0)
@@ -24,7 +25,8 @@ class Simon:
         self.BLUE_inactive = (0, 0, 100)
         self.BLUE_active = (0, 0, 200)
         self.YELLOW_inactive = (150, 150, 0)
-        self.YELLOW_active = (100, 100, 0)
+        self.YELLOW_active = (230, 230, 0)
+        self.WHITE = (255, 255, 255)
 
         self.tile_size = 150
         self.tile_gap = 10
@@ -56,39 +58,133 @@ class Simon:
         self.mouse_clicked = False
         self.mouse_coordinates = None, None
 
-        self.tiles_clicked = []
+        self.user_tiles_clicked = []
+        self.guessed_wrong = False
+
+        self.game_exited = False
+
+        self.score = 0
 
     def main(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-                    pygame.quit()
-                    exit()
-                elif event.type == MOUSEBUTTONDOWN:
-                    self.mouse_clicked = True
-                    self.mouse_coordinates = event.pos
+        pygame.display.update()
+        self.start()
+        while not self.game_exited:
+            self.run_game()
 
-            curr_tile = self.tile_clicked()
-            if curr_tile is not None:
-                self.tiles_clicked.append(curr_tile)
-                self.mouse_clicked = False
-                self.mouse_coordinates = None, None
- 
-            self.DISPLAY_SURFACE.blit(self.bg, self.bg_rect)
-            for color in self.colors_inactive.keys():
-                pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_inactive[color], (self.tiles[color]))
-
-
-            self.FPS_CLOCK.tick(self.FPS)
-            pygame.display.update()
+    def run_game(self):
+        self.guessed_wrong = False
+        self.tile_moves = []
+        self.user_tiles_clicked = []
+        self.score = 0
+        self.draw_score()
+        while not self.guessed_wrong and not self.game_exited:
+            self.FPS_CLOCK.tick(60)
+            self.blit_tiles()
+            self.user_moves()
+            self.draw_score()
+            pygame.time.wait(500)
 
     def tile_clicked(self):
-        if self.mouse_coordinates == (None, None):
-            return
+        while self.mouse_clicked == False:
+            if self.game_exited:
+                return
+            self.get_event()
         for tile in self.tiles.keys():
             if self.tiles[tile].collidepoint(self.mouse_coordinates):
                 return tile
         return
+
+    def draw_starting_position(self):
+        for color in self.colors_inactive.keys():
+            pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_inactive[color], (self.tiles[color]))
+
+    def was_clicked(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                self.terminate()
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                self.game_exited = True
+                return
+            elif event.type == MOUSEBUTTONDOWN:
+                return True
+        return False
+
+    def wait_for_click(self):
+        while not self.was_clicked():
+            if self.game_exited:
+                return
+            self.FPS_CLOCK.tick(self.FPS)
+            pygame.display.update()
+
+    def blit_tiles(self):
+        rand_color = random.choice(tuple(self.tiles.keys()))
+        self.tile_moves.append(rand_color)
+        for color in self.tile_moves:
+            pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_active[color], self.tiles[color])
+            pygame.display.update()
+            pygame.time.wait(500)
+            self.draw_starting_position()
+            pygame.display.update()
+            pygame.time.wait(500)
+
+    def get_event(self):
+        self.mouse_clicked = False
+        self.mouse_coordinates = None, None
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                self.terminate()
+            elif event.type == MOUSEBUTTONDOWN:
+                self.mouse_clicked = True
+                self.mouse_coordinates = event.pos
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                self.game_exited = True
+                return
+
+    def user_moves(self):
+        for color in self.tile_moves:
+            if self.get_tile() != color:
+                self.guessed_wrong = True
+                return
+        self.score += 1
+
+    def get_tile(self):
+        curr_tile = None
+        while curr_tile is None:
+            if self.game_exited:
+                return
+            curr_tile = self.tile_clicked()
+        self.user_tiles_clicked.append(curr_tile)
+        self.mouse_clicked = False
+        self.mouse_coordinates = None, None
+        pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_active[curr_tile], self.tiles[curr_tile])
+        pygame.display.update()
+        pygame.time.wait(500)
+        self.draw_starting_position()
+        pygame.display.update()
+        return curr_tile
+
+    def draw_score(self):
+        self.DISPLAY_SURFACE.blit(self.bg, self.bg_rect)
+        self.draw_starting_position()
+        score =  self.BASICFONT.render(f'Score: {self.score}', True, self.WHITE)
+        score_rect = score.get_rect()
+        score_rect.topleft = self.WIDTH - 300, 20
+        self.DISPLAY_SURFACE.blit(score, score_rect)
+        pygame.display.update()
+
+    def start(self):
+        self.DISPLAY_SURFACE.blit(self.bg, self.bg_rect)
+        start_msg = self.BASICFONT.render("Click to start", True, self.WHITE)
+        start_msg_rect = start_msg.get_rect()
+        start_msg_rect.center = self.WIDTH//2, self.HEIGHT//2
+        self.DISPLAY_SURFACE.blit(start_msg, start_msg_rect)
+        pygame.display.update()
+        self.wait_for_click()
+    def terminate(self):
+        pygame.quit()
+        exit()
+
+
 if __name__ == "__main__":
     simon = Simon()
     simon.main()

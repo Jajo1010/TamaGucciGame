@@ -37,10 +37,12 @@ class FlappyBirdGame:
         self.last_tower_passed = 0
         self.score = 0
         self.ended = False
+        self.game_exited = False
+
 
     def main(self):
         self.title_screen() 
-        while True:
+        while not self.game_exited:
             self.run_game()
             self.is_over()
 
@@ -55,11 +57,12 @@ class FlappyBirdGame:
         self.score = 0
         self.ended = False
         gravity = -12
+
         while not self.was_key_pressed_or_was_clicked():
             self.draw_game_state()
             self.FPS_CLOCK.tick(self.FPS)
             pygame.display.update()
-        while not self.ended:
+        while not self.ended and not self.game_exited:
             for event in pygame.event.get():
                 if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                     self.ended = True
@@ -117,7 +120,7 @@ class FlappyBirdGame:
             elif event.type == MOUSEBUTTONDOWN:
                 return True
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                self.terminate()
+                self.game_exited = True
             elif event.type == KEYDOWN:
                 return True
         return False
