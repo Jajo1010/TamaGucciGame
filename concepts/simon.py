@@ -3,7 +3,6 @@ from pygame.locals import *
 import random
 import os
 from sys import exit
-import time
 
 
 class Simon:
