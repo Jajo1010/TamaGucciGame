@@ -78,6 +78,7 @@ class Simon:
             for color in self.colors_inactive.keys():
                 pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_inactive[color], (self.tiles[color]))
 
+
             self.FPS_CLOCK.tick(self.FPS)
             pygame.display.update()
 
