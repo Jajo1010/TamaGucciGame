@@ -84,10 +84,12 @@ class Simon:
             pygame.time.wait(500)
 
     def tile_clicked(self):
-        while self.mouse_clicked == False:
+        self.mouse_clicked = False
+        while not self.mouse_clicked:
             if self.game_exited:
                 return
             self.get_event()
+            self.FPS_CLOCK.tick(self.FPS)
         for tile in self.tiles.keys():
             if self.tiles[tile].collidepoint(self.mouse_coordinates):
                 return tile
@@ -152,6 +154,7 @@ class Simon:
             if self.game_exited:
                 return
             curr_tile = self.tile_clicked()
+            self.FPS_CLOCK.tick(self.FPS)
         self.user_tiles_clicked.append(curr_tile)
         self.mouse_clicked = False
         self.mouse_coordinates = None, None
