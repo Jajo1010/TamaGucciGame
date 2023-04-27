@@ -12,14 +12,14 @@ DIRNAME = os.path.dirname(__file__)
 
 def display_start_screen():
     sc_text_inactive = pygame.image.load(os.path.join(
-        DIRNAME, "..\\..\\resources\\graphics\\start_inactive.png")).convert_alpha()
+        DIRNAME, "..\\..\\resources\\graphics\\start_screen\\start_inactive.png")).convert_alpha()
     sc_text_active = pygame.image.load(os.path.join(
-        DIRNAME, "..\\..\\resources\\graphics\\start_active.png")).convert_alpha()
+        DIRNAME, "..\\..\\resources\\graphics\\start_screen\\start_active.png")).convert_alpha()
     sc_bg = pygame.image.load(os.path.join(
-        DIRNAME, "..\\..\\resources\\graphics\\start_screen_clean.png"))
+        DIRNAME, "..\\..\\resources\\graphics\\start_screen\\bg.png"))
 
     animation_path = os.path.join(
-        DIRNAME, "..\\..\\resources\\graphics\\animation\\")
+        DIRNAME, "..\\..\\resources\\graphics\\start_screen\\animation\\")
     
     character_spritesheet = Spritesheet(f"{animation_path}\\character_spritesheet.png")
     character_spritesheet_filenames = character_spritesheet.list_of_files()
@@ -60,7 +60,7 @@ def draw_start_text(sc_text_inactive, sc_text_active, text_width, text_height):
 
 
 def draw_animated_character(character, frame):
-    return START_SURFACE.blit(character[frame], (0, SCREEN_HEIGHT-512))
+    return START_SURFACE.blit(character[frame], (-35, SCREEN_HEIGHT-330))
 
 
 def handle_hover(cord_x, cord_y, width, height):
