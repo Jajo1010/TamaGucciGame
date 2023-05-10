@@ -1,6 +1,6 @@
 from constants import *
 import pygame
-from components import start_screen 
+from components import start_screen,main_screen
 from pygame.locals import *
 
 
@@ -13,7 +13,8 @@ def main():
     pygame.display.set_caption("TamaGucci")
 
     pygame.display.update()
-    start_screen.display_start_screen()
+    start_screen.display_start_screen(DISPLAY_SURFACE,FPS_CLOCK)
+    main_screen.display_main_screen(DISPLAY_SURFACE,FPS_CLOCK)
     FPS_CLOCK.tick(FPS)
     
 
