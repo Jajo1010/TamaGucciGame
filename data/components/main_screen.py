@@ -1,4 +1,5 @@
 import pygame
+import components.mini_games as minigames
 from components.clothing_progressbar import ProgressBar
 from pygame.locals import *
 from constants import *
@@ -27,12 +28,11 @@ def display_main_screen(surface, fps):
     while not mini_games_state:
         draw_main_screen(surface, bg)
         draw_character(surface, character)
-        draw_mini_games(surface, mini_games, mini_games_hover, SCREEN_WIDTH -
-                        175, SCREEN_HEIGHT//2+100, mini_games_width, mini_games_height)
+        draw_mini_games_icon(surface, mini_games, mini_games_hover, SCREEN_WIDTH -
+                             175, SCREEN_HEIGHT//2+100, mini_games_width, mini_games_height)
 
         if handle_click(SCREEN_WIDTH-175, SCREEN_HEIGHT//2+100, mini_games_width, mini_games_height):
-            mini_games_state = True
-
+            minigames.display_games_screen(surface, fps)
         handle_quit()
         pygame.display.update()
         fps.tick(FPS)
@@ -46,7 +46,7 @@ def draw_character(surface, character):
     return surface.blit(character, (SCREEN_WIDTH//2-130, SCREEN_HEIGHT//2-110))
 
 
-def draw_mini_games(surface, mini_games_icon, mini_games_icon_hover, cord_x, cord_y, width, height):
+def draw_mini_games_icon(surface, mini_games_icon, mini_games_icon_hover, cord_x, cord_y, width, height):
     if handle_hover(cord_x, cord_y, width, height):
         return surface.blit(mini_games_icon_hover, (SCREEN_WIDTH-175, SCREEN_HEIGHT//2+100))
     return surface.blit(mini_games_icon, (SCREEN_WIDTH-175, SCREEN_HEIGHT//2+100))
