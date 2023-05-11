@@ -77,11 +77,11 @@ class Simon:
         self.score = 0
         self.draw_score()
         while not self.guessed_wrong and not self.game_exited:
-            self.FPS_CLOCK.tick(self.FPS)
+            pygame.time.wait(500)
             self.blit_tiles()
             self.user_moves()
             self.draw_score()
-            pygame.time.wait(500)
+            self.FPS_CLOCK.tick(self.FPS)
 
     def tile_clicked(self):
         self.mouse_clicked = False
@@ -127,6 +127,7 @@ class Simon:
             self.draw_starting_position()
             pygame.display.update()
             pygame.time.wait(200)
+            self.FPS_CLOCK.tick(self.FPS)
 
     def get_event(self):
         self.mouse_clicked = False
