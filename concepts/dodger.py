@@ -11,3 +11,7 @@ class Dodger:
         self.FPS = 30
         self.FPS_CLOCK = pygame.time.Clock()
         self.BASICFONT = pygame.font.Font('freesansbold.ttf', 20)
+
+        self.HERO = pygame.Rect()
+
+    
