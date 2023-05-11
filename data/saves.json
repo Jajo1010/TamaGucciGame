@@ -1,0 +1,11 @@
+{
+    "active_clothing": {
+        "1": "shoes",
+        "2": "pants",
+        "3": "belt",
+        "4": "watches",
+        "5": "hoodie"
+    },
+    "unlocked_clothing": 0,
+    "number_of_clothing" : 5
+}
