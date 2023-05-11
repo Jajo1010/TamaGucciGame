@@ -25,7 +25,6 @@ class WaterHop:
         self.BASICFONT = pygame.font.Font('freesansbold.ttf', 30)
 
     def main(self):
-        print(self.rings[-1].left)
         while not self.ended:
             if pygame.event.get(QUIT):
                 self.terminate()
