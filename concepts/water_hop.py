@@ -1,8 +1,6 @@
 import pygame
 from pygame.locals import *
 
-left = 15
-ring = pygame.Rect(left, 500, 80, 30)
 
 class WaterHop:
     def __init__(self):
@@ -19,8 +17,8 @@ class WaterHop:
         self.DARK_TURQUOISE = (3, 54, 73)
 
         self.ended = False
-        self.ring_gap = 100
-        self.rings = [pygame.Rect((left+self.ring_gap)*i, 500, 80, 30) for i in range(1, 10)] 
+        self.ring_gap = 115
+        self.rings = [pygame.Rect(self.ring_gap*i, 500, 80, 30) for i in range(1, 11)] 
         self.score = 0
         self.starting_y_axis = 450
         self.HERO = pygame.rect.Rect(125, self.starting_y_axis, 50, 50)
@@ -32,14 +30,12 @@ class WaterHop:
                 self.terminate()
             elif self.want_to_exit_game():
                 return
-            self.screen.fill(self.BLUE)
-            self.draw_rings()
-            pygame.draw.rect(self.screen, self.GREY, self.HERO)
-            self.draw_score()
+
+            self.draw_screen()
+            self.handle_click()
             pygame.display.update()
             self.FPS_CLOCK.tick(self.FPS)
-            if self.was_clicked():
-                self.ended = True
+            
 
     def was_clicked(self):
         if pygame.event.get(eventtype=MOUSEBUTTONDOWN):
@@ -48,17 +44,32 @@ class WaterHop:
     def handle_click(self):
         for event in pygame.event.get(eventtype=MOUSEBUTTONDOWN):
             if event.button == 1:
-                return True
+                self.score += 1
+                self.move_rings()
             elif event.button == 3:
-                return True
+                self.score += 2
+                self.move_rings()
+                self.move_rings()
 
-    def wait_for_clicked(self):
+    def wait_for_click(self):
         while not self.was_clicked():
             self.FPS_CLOCK.tick(self.FPS)
 
+    def move_rings(self):
+        for ring in self.rings:
+            ring.x -= 115
+            if ring.right <= 0:
+                ring.left = 1035
+
+    def draw_screen(self):
+        self.screen.fill(self.BLUE)
+        self.draw_rings()
+        pygame.draw.rect(self.screen, self.GREY, self.HERO)
+        self.draw_score()
+
     def draw_rings(self):
-        for i in range(len(self.rings)):
-            pygame.draw.rect(self.screen, self.YELLOW, self.rings[i])
+        for ring in self.rings:
+            pygame.draw.rect(self.screen, self.YELLOW, ring)
 
     def draw_score(self):
         score_surface = self.BASICFONT.render('Score: ' + str(self.score), True, self.DARK_TURQUOISE)

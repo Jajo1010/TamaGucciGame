@@ -77,11 +77,11 @@ class Simon:
         self.score = 0
         self.draw_score()
         while not self.guessed_wrong and not self.game_exited:
-            self.FPS_CLOCK.tick(60)
+            pygame.time.wait(500)
             self.blit_tiles()
             self.user_moves()
             self.draw_score()
-            pygame.time.wait(500)
+            self.FPS_CLOCK.tick(self.FPS)
 
     def tile_clicked(self):
         self.mouse_clicked = False
@@ -123,10 +123,11 @@ class Simon:
         for color in self.tile_moves:
             pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_active[color], self.tiles[color])
             pygame.display.update()
-            pygame.time.wait(500)
+            pygame.time.wait(200)
             self.draw_starting_position()
             pygame.display.update()
-            pygame.time.wait(500)
+            pygame.time.wait(200)
+            self.FPS_CLOCK.tick(self.FPS)
 
     def get_event(self):
         self.mouse_clicked = False
@@ -160,7 +161,7 @@ class Simon:
         self.mouse_coordinates = None, None
         pygame.draw.rect(self.DISPLAY_SURFACE, self.colors_active[curr_tile], self.tiles[curr_tile])
         pygame.display.update()
-        pygame.time.wait(500)
+        pygame.time.wait(200)
         self.draw_starting_position()
         pygame.display.update()
         return curr_tile
@@ -182,6 +183,7 @@ class Simon:
         self.DISPLAY_SURFACE.blit(start_msg, start_msg_rect)
         pygame.display.update()
         self.wait_for_click()
+
     def terminate(self):
         pygame.quit()
         exit()

@@ -29,8 +29,8 @@ class FlappyBirdGame:
         self.cloud_image = pygame.image.load(os.path.join(self.dirname,"..\\resources\\graphics\\flappy_bird\\cloud.png"))
         self.cloud_image = pygame.transform.scale(self.cloud_image, (184, 100)).convert_alpha(self.DISPLAY_SURFACE)
 
-        self.HERO = None
-        self.cloud_rect = None
+        self.HERO = pygame.Rect(self.WIDTH//3, self.HEIGHT//2, 50, 50)
+        self.cloud_rect = pygame.Rect(self.WIDTH, 100, 92, 50)
         self.bg_rect = pygame.Rect(0, -125, self.WIDTH, self.HEIGHT)
         self.top_towers = []
         self.bottom_towers = []
@@ -48,8 +48,8 @@ class FlappyBirdGame:
 
 
     def run_game(self):
-        self.HERO = pygame.Rect(self.WIDTH//3, self.HEIGHT//2, 50, 50)
-        self.cloud_rect = pygame.Rect(self.WIDTH, 100, 92, 50)
+        self.HERO.y = self.HEIGHT//2
+        self.cloud_rect.x = self.WIDTH
         self.top_towers = []
         self.bottom_towers = []
         self.last_tower_passed = 0
