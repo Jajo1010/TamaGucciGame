@@ -58,10 +58,7 @@ class WaterHop:
 
     def move_rings(self):
         for ring in self.rings:
-            while ring.x > ring.x - self.ring_gap:
-                ring.x -= 23
-                self.draw_screen()
-                pygame.display.update()
+            ring.x -= 115
             if ring.right <= 0:
                 ring.left = 1035
 
