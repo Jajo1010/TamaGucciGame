@@ -46,6 +46,7 @@ def display_start_screen(surface, fps):
                            1) % len(character_spritesheet_filenames)
         draw_start_screen(surface, sc_bg)
         
+        
         if is_save():
             draw_new_game_text(surface, sc_new_game, sc_new_game_active, new_game_text_width, new_game_text_height)
             if handle_click_start_game(*top_left_corner_text(SCREEN_WIDTH, (SCREEN_HEIGHT+100+text_height), new_game_text_width, new_game_text_height), text_width, text_height):

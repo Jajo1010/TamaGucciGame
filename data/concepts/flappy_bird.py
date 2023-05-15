@@ -44,6 +44,7 @@ class FlappyBirdGame:
         
         self.coin_sound = sa.WaveObject.from_wave_file(os.path.join(self.dirname, "..\\..\\resources\\sounds\\flappy_bird\\coin.wav"))
         self.hit_sound = sa.WaveObject.from_wave_file(os.path.join(self.dirname, "..\\..\\resources\\sounds\\flappy_bird\\hit.wav"))
+        self.flap_sound = sa.WaveObject.from_wave_file(os.path.join(self.dirname, "..\\..\\resources\\sounds\\flappy_bird\\flap.wav"))
 
         self.top_towers = []
         self.bottom_towers = []
@@ -90,6 +91,7 @@ class FlappyBirdGame:
                 elif event.type == KEYDOWN and event.key == K_SPACE \
                         or event.type == MOUSEBUTTONDOWN:
                     gravity = -12
+                    self.flap_sound.play()
 
             self.HERO_rect.y += gravity
             gravity += 0.75
