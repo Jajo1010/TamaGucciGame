@@ -63,7 +63,7 @@ class Simon:
         self.game_exited = False
 
         self.score = 0
-        self.to_achieve = 12
+        self.to_achieve = 5
         self.achieved_goal = False
 
     def main(self):
@@ -181,7 +181,7 @@ class Simon:
         if self.achieved_goal:
             text_surface = text_font.render(f"Congratulations! You achieved {self.to_achieve}+ score", True, (255, 215, 0))
         else:
-            text_surface = text_font.render("Achieve score 12 to unlock 'NEW GUCCI CLOTHES'", True, (255, 215, 0))
+            text_surface = text_font.render(f"Achieve score {self.to_achieve} to unlock 'NEW GUCCI CLOTHES'", True, (255, 215, 0))
         text_rect = text_surface.get_rect()
         text_rect.center = 400, 550
         self.DISPLAY_SURFACE.blit(text_surface, text_rect)
@@ -205,6 +205,7 @@ class Simon:
 def main():
     simon = Simon()
     simon.main()
+    return simon.achieved_goal
 
 
 if __name__ == "__main__":
