@@ -65,7 +65,7 @@ def display_main_screen(surface, fps):
         pg_bar.draw()
 
         if handle_click(sound,clothing_manager,SCREEN_WIDTH-175, SCREEN_HEIGHT//2+100, mini_games_width, mini_games_height):
-            minigames.display_games_screen(surface, fps)
+            minigames.display_games_screen(surface, fps,clothing_manager)
         handle_quit()
         pygame.display.update()
         fps.tick(FPS)

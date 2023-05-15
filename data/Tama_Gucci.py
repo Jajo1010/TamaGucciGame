@@ -1,7 +1,7 @@
 from constants import *
 import pygame
 from components import start_screen,main_screen
-from helpers import create_save_if_not_default
+
 from pygame.locals import *
 from pygame import mixer
 import os
@@ -14,8 +14,6 @@ DIRNAME = os.path.dirname(__file__)
 def main():
     pygame.init()
     pygame.display.set_caption("TamaGucci")
-
-    create_save_if_not_default()
     
     mixer.init()
     mixer.music.load(os.path.join(DIRNAME,"..\\resources\\sounds\\Music_3.mp3"))

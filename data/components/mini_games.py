@@ -14,7 +14,7 @@ import os
 DIRNAME = os.path.dirname(__file__)
 
 
-def display_games_screen(surface, fps):
+def display_games_screen(surface, fps, manager):
 
     # TODO Migrate to spritesheet
     bg = pygame.image.load(os.path.join(
@@ -92,7 +92,7 @@ def display_games_screen(surface, fps):
         handle_hover_game_icons(surface, icons_positions,
                                 icon_width, home_icon_width)
         
-        if handle_clicks(sound,icons_functions):
+        if handle_clicks(sound,icons_functions,manager):
             mini_games_state = True
 
         handle_quit()
@@ -122,7 +122,7 @@ def draw_home_icon(surface, home_icon: object, cord_x, cord_y, width, height):
     return surface.blit(home_icon, (cord_x, cord_y, width, height))
 
 
-def handle_clicks(sound,positions: dict):
+def handle_clicks(sound,positions: dict,manager):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if pygame.event.get(MOUSEBUTTONUP):
         for clickable in positions:
@@ -131,7 +131,9 @@ def handle_clicks(sound,positions: dict):
                 return True
             elif (mouse_x >= positions[clickable][0] and mouse_x <= positions[clickable][0]+positions[clickable][2]) and (mouse_y >= positions[clickable][1] and mouse_y <= positions[clickable][3]+positions[clickable][1]):
                 sound.play()
-                clickable.main()
+                mixer.music.stop()
+                if clickable.main():
+                    manager.add_clothing()
                 mixer.music.load(os.path.join(DIRNAME,"..\\..\\resources\\sounds\\Music_3.mp3"))
                 mixer.music.play()
                 

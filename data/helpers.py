@@ -28,3 +28,14 @@ def create_save_if_not_default():
     if not save_found:
         shutil.copy("default.json", "save.json") 
 
+def is_save():
+    save_found = False
+    for files in os.listdir(os.getcwd()):
+        if "save.json" in files:
+            save_found = True
+    return save_found
+
+def delete_save_file():
+    file_path = os.path.join(os.getcwd(), "save.json")  
+    if os.path.exists(file_path):
+        os.remove(file_path)

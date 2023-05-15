@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from pygame import mixer
+import simpleaudio as sa
 from sys import exit
 import random
 import os
@@ -41,12 +42,15 @@ class FlappyBirdGame:
         mixer.music.load(os.path.join(self.dirname,"..\\..\\resources\\sounds\\flappy_bird\\Music_4.mp3"))
         mixer.music.set_volume(0.2)
         
+        self.coin_sound = sa.WaveObject.from_wave_file(os.path.join(self.dirname, "..\\..\\resources\\sounds\\flappy_bird\\coin.wav"))
+        self.hit_sound = sa.WaveObject.from_wave_file(os.path.join(self.dirname, "..\\..\\resources\\sounds\\flappy_bird\\hit.wav"))
+
         self.top_towers = []
         self.bottom_towers = []
         self.last_tower_passed = 0
 
         self.score = 0
-        self.to_achieve = 50
+        self.to_achieve = 5
         self.achieved_goal = False
 
 
@@ -94,13 +98,17 @@ class FlappyBirdGame:
             for i in range(len(self.top_towers)):
                 if self.HERO_rect.colliderect(self.top_towers[i]) or self.HERO_rect.colliderect(self.bottom_towers[i]):
                     self.ended = True
+                    self.hit_sound.play()
 
             if self.HERO_rect.y >= self.HEIGHT-50 or self.HERO_rect.y <= 0-50:
                 self.ended = True
+                self.hit_sound.play()
 
             if self.HERO_rect.x > self.top_towers[self.last_tower_passed].right:
                 self.last_tower_passed = (self.last_tower_passed + 1) % len(self.top_towers)
                 self.score += 1
+                self.coin_sound.play()
+
 
             if self.score >= self.to_achieve:
                 self.achieved_goal = True
@@ -123,7 +131,7 @@ class FlappyBirdGame:
         if self.achieved_goal:
             text_surface = text_font.render(f"Congratulation! You've achieved {self.to_achieve}+ score.", True, (0, 0, 0))
         else:
-            text_surface = text_font.render("Achieve score 50 to unlock 'NEW GUCCI CLOTHES'", True, (0, 0, 0))
+            text_surface = text_font.render(f"Achieve score {self.to_achieve} to unlock 'NEW GUCCI CLOTHES'", True, (0, 0, 0))
         text_rect = text_surface.get_rect()
         text_rect.center = 400, 435
         self.DISPLAY_SURFACE.blit(text_surface, text_rect)
@@ -245,6 +253,7 @@ class FlappyBirdGame:
 def main():
     flappy = FlappyBirdGame()
     flappy.main()
+    return flappy.achieved_goal
 
 if __name__ == "__main__":
     main()
