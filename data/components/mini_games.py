@@ -1,4 +1,7 @@
 import pygame
+import concepts.flappy_bird as fb
+import concepts.simon as simon_game
+import concepts.water_hop as wh
 from components.clothing_progressbar import ProgressBar
 from pygame.locals import *
 from constants import *
@@ -10,6 +13,8 @@ DIRNAME = os.path.dirname(__file__)
 
 
 def display_games_screen(surface, fps):
+
+    # TODO Migrate to spritesheet
     bg = pygame.image.load(os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\game_choice\\bg.png"))
     character = pygame.image.load(os.path.join(
@@ -57,6 +62,13 @@ def display_games_screen(surface, fps):
         water_drop_hover: [560, 100]
     }
 
+    icons_functions = {
+        fb: [110, 100,icon_width,icon_height],
+        simon_game: [335, 100,icon_width,icon_height],
+        wh: [560, 100,icon_width,icon_height],
+        "home_button" : [10,400,home_icon_width,home_icon_height]
+    }
+
     mini_games_state = False
 
     while not mini_games_state:
@@ -68,15 +80,14 @@ def display_games_screen(surface, fps):
         draw_home_icon(surface, home_icon, 10, SCREEN_HEIGHT //
                        2+100, home_icon_width, home_icon_height)
 
-        handle_hover_game_icons(surface, icons_positions,
-                                icon_width, home_icon_width)
-
         draw_icon_text(surface, icon_text, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         handle_hover_home_icon(surface, 10, SCREEN_HEIGHT //
-                               2+100, home_icon_width, home_icon_height, home_icon_hover)
-
-        if handle_click_home(10, SCREEN_HEIGHT - (home_icon_height+10), home_icon_width, home_icon_height):
+                                2+100, home_icon_width, home_icon_height, home_icon_hover)
+        handle_hover_game_icons(surface, icons_positions,
+                                icon_width, home_icon_width)
+        
+        if handle_clicks(icons_functions):
             mini_games_state = True
 
         handle_quit()
@@ -106,18 +117,15 @@ def draw_home_icon(surface, home_icon: object, cord_x, cord_y, width, height):
     return surface.blit(home_icon, (cord_x, cord_y, width, height))
 
 
-def handle_click_games(cord_x, cord_y, width, height):
+def handle_clicks(positions: dict):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if pygame.event.get(MOUSEBUTTONUP):
-        if (mouse_x >= cord_x and mouse_x <= cord_x+width) and (mouse_y >= cord_y and mouse_y <= height+cord_y):
-            return True
-
-
-def handle_click_home(cord_x, cord_y, width, height):
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-    if pygame.event.get(MOUSEBUTTONUP):
-        if (mouse_x >= cord_x and mouse_x <= cord_x+width) and (mouse_y >= cord_y and mouse_y <= height+cord_y):
-            return True
+        for clickable in positions:
+            if clickable == "home_button" and (mouse_x >= positions[clickable][0] and mouse_x <= positions[clickable][0]+positions[clickable][2]) and (mouse_y >= positions[clickable][1] and mouse_y <= positions[clickable][3]+positions[clickable][1]) :
+                return True
+            elif (mouse_x >= positions[clickable][0] and mouse_x <= positions[clickable][0]+positions[clickable][2]) and (mouse_y >= positions[clickable][1] and mouse_y <= positions[clickable][3]+positions[clickable][1]):
+                print("hehe")
+                return clickable.main()
 
 
 def handle_hover_game_icons(surface, positions: dict, width, height):

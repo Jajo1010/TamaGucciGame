@@ -51,7 +51,7 @@ class Simon:
         }
 
         self.tile_moves = []
-        self.bg = pygame.image.load(os.path.join(self.dirname,"..\\resources\\graphics\\simon\\gucci_bg.jpg"))
+        self.bg = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\simon\\gucci_bg.jpg"))
         self.bg_rect = self.bg.get_rect()
 
         self.mouse_clicked = False
@@ -189,8 +189,11 @@ class Simon:
         exit()
 
 
-if __name__ == "__main__":
+def main():
     simon = Simon()
     simon.main()
 
+
+if __name__ == "__main__":
+    main()
 

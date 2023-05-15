@@ -86,5 +86,8 @@ class WaterHop:
         pygame.quit()
         exit()
 
-if __name__ == "__main__":
+def main():
     WaterHop().main()
+
+if __name__ == "__main__":
+    main()

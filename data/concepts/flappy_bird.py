@@ -4,7 +4,6 @@ from sys import exit
 import random
 import os
 
-
 class FlappyBirdGame:
     def __init__(self):
         pygame.init()
@@ -24,12 +23,13 @@ class FlappyBirdGame:
         self.DISPLAY_SURFACE = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.FPS_CLOCK = pygame.time.Clock()
         self.BASICFONT = pygame.font.Font('freesansbold.ttf', 20)
-        self.bg = pygame.image.load(os.path.join(self.dirname,"..\\resources\\graphics\\flappy_bird\\city-bg.png"))
+        self.bg = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\flappy_bird\\city-bg.png"))
         self.bg = pygame.transform.scale(self.bg, (1600, 768))
-        self.cloud_image = pygame.image.load(os.path.join(self.dirname,"..\\resources\\graphics\\flappy_bird\\cloud.png"))
+        self.cloud_image = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\flappy_bird\\cloud.png"))
         self.cloud_image = pygame.transform.scale(self.cloud_image, (184, 100)).convert_alpha(self.DISPLAY_SURFACE)
-
-        self.HERO = pygame.Rect(self.WIDTH//3, self.HEIGHT//2, 50, 50)
+        
+        self.HERO = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\flappy_bird\\character.png"))
+        self.HERO_rect = pygame.Rect(self.WIDTH//3, self.HEIGHT//2, 60, 60)
         self.cloud_rect = pygame.Rect(self.WIDTH, 100, 92, 50)
         self.bg_rect = pygame.Rect(0, -125, self.WIDTH, self.HEIGHT)
         self.top_towers = []
@@ -40,6 +40,7 @@ class FlappyBirdGame:
         self.game_exited = False
 
 
+
     def main(self):
         self.title_screen() 
         while not self.game_exited:
@@ -48,7 +49,7 @@ class FlappyBirdGame:
 
 
     def run_game(self):
-        self.HERO.y = self.HEIGHT//2
+        self.HERO_rect.y = self.HEIGHT//2
         self.cloud_rect.x = self.WIDTH
         self.top_towers = []
         self.bottom_towers = []
@@ -70,18 +71,18 @@ class FlappyBirdGame:
                         or event.type == MOUSEBUTTONDOWN:
                     gravity = -12
 
-            self.HERO.y += gravity
+            self.HERO_rect.y += gravity
             gravity += 0.75
             self.move_towers()
 
             for i in range(len(self.top_towers)):
-                if self.HERO.colliderect(self.top_towers[i]) or self.HERO.colliderect(self.bottom_towers[i]):
+                if self.HERO_rect.colliderect(self.top_towers[i]) or self.HERO_rect.colliderect(self.bottom_towers[i]):
                     self.ended = True
 
-            if self.HERO.y >= self.HEIGHT-50 or self.HERO.y <= 0-50:
+            if self.HERO_rect.y >= self.HEIGHT-50 or self.HERO_rect.y <= 0-50:
                 self.ended = True
 
-            if self.HERO.x > self.top_towers[self.last_tower_passed].right:
+            if self.HERO_rect.x > self.top_towers[self.last_tower_passed].right:
                 self.last_tower_passed = (self.last_tower_passed + 1) % len(self.top_towers)
                 self.score += 1
 
@@ -206,14 +207,17 @@ class FlappyBirdGame:
     def draw_game_state(self, bg_speed=0):
         self.draw_bg(bg_speed)
         self.draw_towers()
-        pygame.draw.rect(self.DISPLAY_SURFACE, (0, 255, 0), self.HERO)
+        self.DISPLAY_SURFACE.blit(self.HERO, self.HERO_rect)
         self.draw_score()
 
     def terminate(self):
         pygame.quit()
         exit()
 
-if __name__ == "__main__":
+def main():
     flappy = FlappyBirdGame()
     flappy.main()
+
+if __name__ == "__main__":
+    main()
 
