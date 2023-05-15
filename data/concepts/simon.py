@@ -63,6 +63,8 @@ class Simon:
         self.game_exited = False
 
         self.score = 0
+        self.to_achieve = 12
+        self.achieved_goal = False
 
     def main(self):
         pygame.display.update()
@@ -80,6 +82,8 @@ class Simon:
             pygame.time.wait(500)
             self.blit_tiles()
             self.user_moves()
+            if self.score >= self.to_achieve:
+                self.achieved_goal = True
             self.draw_score()
             self.FPS_CLOCK.tick(self.FPS)
 
@@ -172,6 +176,15 @@ class Simon:
         score =  self.BASICFONT.render(f'Score: {self.score}', True, self.WHITE)
         score_rect = score.get_rect()
         score_rect.topleft = self.WIDTH - 300, 20
+
+        text_font = pygame.font.Font('freesansbold.ttf', 25)
+        if self.achieved_goal:
+            text_surface = text_font.render(f"Congratulations! You achieved {self.to_achieve}+ score", True, (255, 215, 0))
+        else:
+            text_surface = text_font.render("Achieve score 12 to unlock 'NEW GUCCI CLOTHES'", True, (255, 215, 0))
+        text_rect = text_surface.get_rect()
+        text_rect.center = 400, 550
+        self.DISPLAY_SURFACE.blit(text_surface, text_rect)
         self.DISPLAY_SURFACE.blit(score, score_rect)
         pygame.display.update()
 

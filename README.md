@@ -26,3 +26,25 @@ TamaGucci is a game inspired by Pou, where your goal is to beat mini games in or
 - Photoshop
 - Illustrator
 - Ableton
+
+# Project Installation Guide
+
+To install and run this Python project, please follow the steps below:
+
+## Prerequisites
+
+- Python 3.x installed on your system
+- Pip package manager
+
+## Installation Steps
+
+1. Clone, pip install, change directory, play game:
+
+   ```shell
+   git clone https://github.com/Jajo1010/TamaGucciGame.git
+   cd TamaGucci
+   pip install -r "requirements.txt"
+   cd data 
+   py Tama_Gucci.py
+   ```
+   
