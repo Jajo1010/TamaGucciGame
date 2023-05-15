@@ -10,6 +10,7 @@ DIRNAME = os.path.dirname(__file__)
 
 
 def display_start_screen(surface, fps):
+
     sc_text_inactive = pygame.image.load(os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\start_screen\\start_inactive.png")).convert_alpha()
     sc_text_active = pygame.image.load(os.path.join(

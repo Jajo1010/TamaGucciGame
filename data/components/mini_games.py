@@ -19,9 +19,6 @@ def display_games_screen(surface, fps):
     # TODO Migrate to spritesheet
     bg = pygame.image.load(os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\game_choice\\bg.png"))
-    character = pygame.image.load(os.path.join(
-        DIRNAME, "..\\..\\resources\\graphics\\character\\clean.png"))
-
     gucci_bird = pygame.image.load(os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\game_choice\\game_icons\\gucci_bird.png")).convert_alpha()
     simon = pygame.image.load(os.path.join(
