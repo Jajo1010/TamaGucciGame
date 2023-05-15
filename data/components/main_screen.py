@@ -11,10 +11,7 @@ import os
 
 DIRNAME = os.path.dirname(__file__)
 
-
 def display_main_screen(surface, fps):
-
-    
     
     bg = pygame.image.load(os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\main_screen\\bg.png"))
@@ -27,12 +24,12 @@ def display_main_screen(surface, fps):
     clothing_manager = ClothingManager(os.path.join(
         DIRNAME, "..\\save.json"))
     
-    clothes = clothing_manager.clothing_to_draw()
+    pg_bar = ProgressBar(surface,clothing_manager)
 
     animation_path = os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\character\\animation\\")
     character_spritesheet = Spritesheet(
-        f"{animation_path}\\{clothes}")
+        f"{animation_path}\\{clothing_manager.clothing_to_draw()}")
     
     character_spritesheet_filenames = character_spritesheet.list_of_files()
     character_animation = [character_spritesheet.parse_sprite(
@@ -47,12 +44,25 @@ def display_main_screen(surface, fps):
 
     mini_games_state = False
 
+    previous_cloth_name = clothing_manager.clothing_to_draw()
+
     while not mini_games_state:
+
+        new_cloth_name = clothing_manager.clothing_to_draw()
+
+        if (new_cloth_name != previous_cloth_name):
+            character_spritesheet = Spritesheet(f"{animation_path}\\{clothing_manager.clothing_to_draw()}")
+            character_spritesheet_filenames = character_spritesheet.list_of_files()
+            character_animation = [character_spritesheet.parse_sprite(file) for file in character_spritesheet_filenames]
+            previous_cloth_name = new_cloth_name
+            pg_bar = ProgressBar(surface,clothing_manager)
+
         animation_frame = (animation_frame + 1) % len(character_spritesheet_filenames)
         draw_main_screen(surface, bg)
         draw_mini_games_icon(surface, mini_games, mini_games_hover, SCREEN_WIDTH -
                              175, SCREEN_HEIGHT//2+100, mini_games_width, mini_games_height)
         draw_animated_character(surface, character_animation,animation_frame)
+        pg_bar.draw()
 
         if handle_click(sound,clothing_manager,SCREEN_WIDTH-175, SCREEN_HEIGHT//2+100, mini_games_width, mini_games_height):
             minigames.display_games_screen(surface, fps)
@@ -78,7 +88,7 @@ def handle_click(sound,cloth_manager,cord_x, cord_y, width, height):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if pygame.event.get(MOUSEBUTTONUP):
         if (mouse_x >= cord_x and mouse_x <= cord_x+width) and (mouse_y >= cord_y and mouse_y <= height+cord_y):
-            cloth_manager.add_clothing()
+            #cloth_manager.add_clothing()
             sound.play()
             return True
 
