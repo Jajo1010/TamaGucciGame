@@ -172,6 +172,12 @@ class Simon:
         score =  self.BASICFONT.render(f'Score: {self.score}', True, self.WHITE)
         score_rect = score.get_rect()
         score_rect.topleft = self.WIDTH - 300, 20
+
+        text_font = pygame.font.Font('freesansbold.ttf', 25)
+        text_surface = text_font.render("Achieve score 12 to unlock 'NEW GUCCI CLOTHES'", True, (255, 215, 0))
+        text_rect = text_surface.get_rect()
+        text_rect.center = 400, 550
+        self.DISPLAY_SURFACE.blit(text_surface, text_rect)
         self.DISPLAY_SURFACE.blit(score, score_rect)
         pygame.display.update()
 

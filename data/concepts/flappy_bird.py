@@ -113,6 +113,11 @@ class FlappyBirdGame:
         game_rect.center = (self.WIDTH // 2, 150)
         over_rect.center = (self.WIDTH // 2, 250)
 
+        text_font = pygame.font.Font('freesansbold.ttf', 25)
+        text_surface = text_font.render("Achieve score 50 to unlock 'NEW GUCCI CLOTHES'", True, (0, 0, 0))
+        text_rect = text_surface.get_rect()
+        text_rect.center = 400, 435
+        self.DISPLAY_SURFACE.blit(text_surface, text_rect)
         self.DISPLAY_SURFACE.blit(game_surface, game_rect)
         self.DISPLAY_SURFACE.blit(over_surface, over_rect)
 
