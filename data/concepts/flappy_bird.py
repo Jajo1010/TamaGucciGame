@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from pygame import mixer
 from sys import exit
 import random
 import os
@@ -19,23 +20,33 @@ class FlappyBirdGame:
         self.TOWER_GAP = 300
 
         self.dirname = os.path.dirname(__file__)
+
         self.FPS = 60
         self.DISPLAY_SURFACE = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.FPS_CLOCK = pygame.time.Clock()
         self.BASICFONT = pygame.font.Font('freesansbold.ttf', 20)
+
         self.bg = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\flappy_bird\\city-bg.png"))
         self.bg = pygame.transform.scale(self.bg, (1600, 768))
+        self.bg_rect = pygame.Rect(0, -125, self.WIDTH, self.HEIGHT)
+
         self.cloud_image = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\flappy_bird\\cloud.png"))
         self.cloud_image = pygame.transform.scale(self.cloud_image, (184, 100)).convert_alpha(self.DISPLAY_SURFACE)
+        self.cloud_rect = pygame.Rect(self.WIDTH, 100, 92, 50)
         
         self.HERO = pygame.image.load(os.path.join(self.dirname,"..\\..\\resources\\graphics\\flappy_bird\\character.png"))
         self.HERO_rect = pygame.Rect(self.WIDTH//3, self.HEIGHT//2, 60, 60)
-        self.cloud_rect = pygame.Rect(self.WIDTH, 100, 92, 50)
-        self.bg_rect = pygame.Rect(0, -125, self.WIDTH, self.HEIGHT)
+
+        mixer.init()
+        mixer.music.load(os.path.join(self.dirname,"..\\..\\resources\\sounds\\flappy_bird\\Music_4.mp3"))
+        mixer.music.set_volume(0.2)
+        
         self.top_towers = []
         self.bottom_towers = []
         self.last_tower_passed = 0
+
         self.score = 0
+
         self.ended = False
         self.game_exited = False
 
@@ -43,9 +54,11 @@ class FlappyBirdGame:
 
     def main(self):
         self.title_screen() 
+        mixer.music.play()
         while not self.game_exited:
             self.run_game()
             self.is_over()
+        mixer.music.stop()
 
 
     def run_game(self):
@@ -122,6 +135,7 @@ class FlappyBirdGame:
                 return True
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 self.game_exited = True
+                return True
             elif event.type == KEYDOWN:
                 return True
         return False

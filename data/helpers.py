@@ -1,6 +1,8 @@
 import sys
 import os
 import pygame
+import json
+import shutil
 
 def terminate():
     pygame.quit()
@@ -17,3 +19,12 @@ def file_list_from_dir(path):
 
 def surfaces_from_file_list(path,files_list):
     return [pygame.image.load(f"{path}\\{sprite}").convert_alpha() for sprite in files_list]
+
+def create_save_if_not_default():
+    save_found = False
+    for files in os.listdir(os.getcwd()):
+        if "save.json" in files:
+            save_found = True
+    if not save_found:
+        shutil.copy("default.json", "save.json") 
+

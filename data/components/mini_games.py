@@ -1,4 +1,6 @@
 import pygame
+from pygame import mixer
+import simpleaudio as sa
 import concepts.flappy_bird as fb
 import concepts.simon as simon_game
 import concepts.water_hop as wh
@@ -68,6 +70,12 @@ def display_games_screen(surface, fps):
         wh: [560, 100,icon_width,icon_height],
         "home_button" : [10,400,home_icon_width,home_icon_height]
     }
+    
+    mixer.init()
+    mixer.music.set_volume(0.2)
+
+    sound = sa.WaveObject.from_wave_file(os.path.join(
+        DIRNAME, "..\\..\\resources\\sounds\\sound_effects\\pop.wav"))
 
     mini_games_state = False
 
@@ -87,7 +95,7 @@ def display_games_screen(surface, fps):
         handle_hover_game_icons(surface, icons_positions,
                                 icon_width, home_icon_width)
         
-        if handle_clicks(icons_functions):
+        if handle_clicks(sound,icons_functions):
             mini_games_state = True
 
         handle_quit()
@@ -117,16 +125,19 @@ def draw_home_icon(surface, home_icon: object, cord_x, cord_y, width, height):
     return surface.blit(home_icon, (cord_x, cord_y, width, height))
 
 
-def handle_clicks(positions: dict):
+def handle_clicks(sound,positions: dict):
     mouse_x, mouse_y = pygame.mouse.get_pos()
     if pygame.event.get(MOUSEBUTTONUP):
         for clickable in positions:
             if clickable == "home_button" and (mouse_x >= positions[clickable][0] and mouse_x <= positions[clickable][0]+positions[clickable][2]) and (mouse_y >= positions[clickable][1] and mouse_y <= positions[clickable][3]+positions[clickable][1]) :
+                sound.play()
                 return True
             elif (mouse_x >= positions[clickable][0] and mouse_x <= positions[clickable][0]+positions[clickable][2]) and (mouse_y >= positions[clickable][1] and mouse_y <= positions[clickable][3]+positions[clickable][1]):
-                print("hehe")
-                return clickable.main()
-
+                sound.play()
+                clickable.main()
+                mixer.music.load(os.path.join(DIRNAME,"..\\..\\resources\\sounds\\Music_3.mp3"))
+                mixer.music.play()
+                
 
 def handle_hover_game_icons(surface, positions: dict, width, height):
     mouse_x, mouse_y = pygame.mouse.get_pos()
