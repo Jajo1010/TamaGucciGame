@@ -25,7 +25,6 @@ TamaGucci is a game inspired by Pou, where your goal is to beat mini games in or
 - Pygame
 - Photoshop
 - Illustrator
-- Ableton
 
 # Project Installation Guide
 
