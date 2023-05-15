@@ -46,6 +46,9 @@ class FlappyBirdGame:
         self.last_tower_passed = 0
 
         self.score = 0
+        self.to_achieve = 50
+        self.achieved_goal = False
+
 
         self.ended = False
         self.game_exited = False
@@ -99,6 +102,9 @@ class FlappyBirdGame:
                 self.last_tower_passed = (self.last_tower_passed + 1) % len(self.top_towers)
                 self.score += 1
 
+            if self.score >= self.to_achieve:
+                self.achieved_goal = True
+
             self.draw_game_state(bg_speed=3)
             self.FPS_CLOCK.tick(self.FPS)
             pygame.display.update()
@@ -114,7 +120,10 @@ class FlappyBirdGame:
         over_rect.center = (self.WIDTH // 2, 250)
 
         text_font = pygame.font.Font('freesansbold.ttf', 25)
-        text_surface = text_font.render("Achieve score 50 to unlock 'NEW GUCCI CLOTHES'", True, (0, 0, 0))
+        if self.achieved_goal:
+            text_surface = text_font.render(f"Congratulation! You've achieved {self.to_achieve}+ score.", True, (0, 0, 0))
+        else:
+            text_surface = text_font.render("Achieve score 50 to unlock 'NEW GUCCI CLOTHES'", True, (0, 0, 0))
         text_rect = text_surface.get_rect()
         text_rect.center = 400, 435
         self.DISPLAY_SURFACE.blit(text_surface, text_rect)
