@@ -24,7 +24,6 @@ def display_start_screen(surface, fps):
         DIRNAME, "..\\..\\resources\\graphics\\start_screen\\bg.png"))
     text_width, text_height = sc_text_active.get_width(), sc_text_active.get_height()
     new_game_text_width, new_game_text_height = sc_text_active.get_width(), sc_text_active.get_height()
-
     
     animation_path = os.path.join(
         DIRNAME, "..\\..\\resources\\graphics\\start_screen\\animation\\")
@@ -52,14 +51,16 @@ def display_start_screen(surface, fps):
             if handle_click_start_game(*top_left_corner_text(SCREEN_WIDTH, (SCREEN_HEIGHT+100+text_height), new_game_text_width, new_game_text_height), text_width, text_height):
                 delete_save_file()
                 create_save_if_not_default()
+                print("sdad")
                 game_started = True
 
-        draw_animated_character(surface, character_animation, animation_frame)
-        
         if handle_click_start_game(*top_left_corner_text(SCREEN_WIDTH, SCREEN_HEIGHT, text_width, text_height), text_width, text_height):
             sound.play()
             create_save_if_not_default()
+            print("aaaa")
             game_started = True
+        
+        draw_animated_character(surface, character_animation, animation_frame)
         
         handle_quit()
         draw_start_text(surface, sc_text_inactive,

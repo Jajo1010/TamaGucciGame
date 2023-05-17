@@ -1,0 +1,17 @@
+{
+    "active_clothing": {
+        "0": "clean.png",
+        "1": "pants.png",
+        "2": "shoes.png"
+    },
+    "available_clothing": {
+        "0": "clean.png",
+        "1": "pants.png",
+        "2": "shoes.png",
+        "3": "belt.png",
+        "4": "watch.png",
+        "5": "hoodie.png"
+    },
+    "unlocked_clothing_count": 2,
+    "clothing_count": 5
+}
